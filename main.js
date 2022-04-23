@@ -107,7 +107,7 @@ const videoBtnModal = () => { // This defines the variable that will be the "Add
 
 // Video component with default arg value
 // = 'cNjIUSDnb9k'
-const videoPlayer = (videoId) => { //Defines our video player function and adds it to the dom. This function does take a parameter of videoId, which is a key in our data
+const videoPlayer = (videoId = 'cNjIUSDnb9k') => { //Defines our video player function and adds it to the dom. This function does take a parameter of videoId, which is a key in our data. Setting the video ID equal to one of the video IDs will ensure that there is automatically a video in the video player when a user opens the app
   const domString = `
   <iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   `; // this code is copied from youtube
@@ -208,13 +208,20 @@ const eventListeners = () => {
   form.addEventListener('submit', (e) => {
     e.preventDefault(); // this goes in EVERY form submit to prevent page reload
     // grab the values from the form inputs and create an object
+    const newVideoObj = {
+      videoId: document.querySelector("#videoId").value,
+      title: document.querySelector("#title").value,
+      category: document.querySelector("#category").value,
+      favorite: document.querySelector("#videoId").checked,
+    }
     // push that object to the data array    
+    data.push(newVideoObj); 
     // rerender cards using the cardsOnDom function and pass it the updated data array
-    
+    cardsOnDom(data)
     
     // Close modal and reset form
     formModal.hide()
-    form.reset();
+    form.reset(); // you can only use .reset with forms. if you have myultiple forms, you will need to add IDs to your forms
   });
 };
 
