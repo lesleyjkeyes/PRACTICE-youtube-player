@@ -147,7 +147,7 @@ const cardsOnDom = (array) => {
       <button class="btn btn-danger" id="delete--${item.videoId}">X</button>
     </div>
   </div>
-    `; // This is where we reassign the domString
+    `; // This is where we reassign the domString. All the video IDs need to be unique in order to play each individual video. If the ID's are not unique, only the first video with that ID will play.
   }
   renderToDom('#cardContainer', domString); //this will add the cards to the cardContainer div
 };
@@ -158,9 +158,18 @@ const eventListeners = () => {
   const formModal = new bootstrap.Modal(document.querySelector('#add-video'));
   
   // FILTER BUTTON ROW
-  document.querySelector('#filterContainer').addEventListener('click', (e) => {
-    console.log("You clicked a filter button", e.target.id);
+ document.querySelector('#filterContainer').addEventListener('click', (e) => { // This targets the filterContainer div and adds an event listener to it. elements have to be on the DOM before we can add event listeners to them.
+    // console.log("You clicked a filter button", e.target.id); // This will console log regardless of if you're actually clicking on a filter button or not
     // filter on category (either use .filter or a loop)
+    if (e.target.id === "clear") { // this targets the id of "clear"
+      cardsOnDom(data); // calling the cardsondom function that we created earlier
+    } else if (e.target.id === "favorite") { // this targets the id of "favorite" 
+      const favs = data.filter(taco => taco.favorite === true); // .filter returns an array
+      cardsOnDom(favs);
+    } else if (e.target.id) { // this will target anything with an ID(the ID is not blank). This is truthy. This will target all of our other buttons because they have ID's 
+      const topics = data.filter(vid => vid.category === e.target.id);
+      cardsOnDom(topics);
+    }
     // rerender DOM with new array (use the cardsOnDom function)
   });
 
@@ -169,15 +178,17 @@ const eventListeners = () => {
     // check to make sure e.target.id is not empty
     if (e.target.id) {
       // get the video ID off the button ID
+      // const videoActions = e.target.id.split("--"); //This does the same thing as the below 
+      const [method, videoId] = e.target.id.split("--"); // This does the same thing as the above. This is called destructuring
       // find the index of the object in the array
+      const index = data.findIndex(taco => taco.videoId === videoId)
 
       // only listen for events with "watch" or "delete" included in the string
-
+      
       // if watch: grab the ID and rerender the videoPlayer with that ID as an argument
       if (e.target.id.includes('watch')) {
         console.log("Pressed Watch Button")        
-        
-        
+        videoPlayer(videoId);
         // scroll to top of page
         document.location = '#';
       }
@@ -185,8 +196,9 @@ const eventListeners = () => {
       // if delete: find the index of item in array and splice
       // NOTE: if 2 videos have the same videoId, this will delete the first one in the array
       if (e.target.id.includes('delete')) {
-        console.log("Delete Button Pressed")
+        data.splice(index, 1);
         // rerender DOM with updated data array (use the cardsOnDom function)
+        cardsOnDom(data);
       }
     }
   });
