@@ -39,14 +39,14 @@ const data = [
 ];
 
 // *********  UTILITY FUNCTIONS  ********* //
-const renderToDom = (divId, textToRender) => {
-  const selectedElement = document.querySelector(divId);
-  selectedElement.innerHTML = textToRender;
+const renderToDom = (divId, textToRender) => { //This defines the function and names the parameters that need to be entered
+  const selectedElement = document.querySelector(divId); // This selects the div in our HTML that we want to select/target
+  selectedElement.innerHTML = textToRender; // This defines the content we want to add to the selected div
 };
 
 // *********  HTML COMPONENT FUNCTIONS  ********* //
 // Add Video Button / Modal
-const videoBtnModal = () => {
+const videoBtnModal = () => { // This defines the variable that will be the "Add Video" button
   const domString = `
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#add-video">
@@ -101,17 +101,17 @@ const videoBtnModal = () => {
         </div>
       </div>
     </div>
-  `;
-  renderToDom('#createBtnContainer', domString);
+  `; // domString is set as a constant because we will not want to change what is present in the modal that pops up when we click on the button. This domString is scoped to the function, so we use domString in other places as well. Everything should be scoped within functions
+  renderToDom('#createBtnContainer', domString); // This calls our utility function, names the div we want to target and selects the variable that has the conent we want to display This is contained within our "videobtnmodal" because domString is scope locally. Function will not run if we do this because domString is not globablly defined
 };
 
 // Video component with default arg value
 // = 'cNjIUSDnb9k'
-const videoPlayer = (videoId) => {
+const videoPlayer = (videoId) => { //Defines our video player function and adds it to the dom. This function does take a parameter of videoId, which is a key in our data
   const domString = `
   <iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  `;
-  renderToDom('#videoPlayer', domString);
+  `; // this code is copied from youtube
+  renderToDom('#videoPlayer', domString); // This places the video played on the dom for us in the videoPlayer div. Again, domString is locally scoped
 };
 
 // Filter Button Row
@@ -125,14 +125,14 @@ const filterButtons = () => {
     <button class="btn btn-secondary btn-lg buttonRow" id="favorite">Favorites</button>
     <button class="btn btn-secondary btn-lg buttonRow" id="clear">Clear Filter</button>
   </div>
-  `;
-  renderToDom('#filterContainer', domString);
+  `; // This adds a bunch of buttonn. This button HTML should be structured exactly how you would structure it in your HTML(make sure you add your IDs to the buttons).
+  renderToDom('#filterContainer', domString); // This places the buttons in the filterContainer
 };
 
 // Cards
-const cardsOnDom = (array) => {
-  let domString = '';
-  for (const item of array) {
+const cardsOnDom = (array) => { 
+  let domString = ''; // we start with an empty string, but will change it so we use let instead of const. Whenever we have a loop, we will want to start with an empty domString. If we don't clear out the dom, the funciton will append to the dom
+  for (const item of array) { // this will loop through each item in the array. We are creating a reusable function here. We have to create all the functions before we can call them and pass the parameters
     domString += `
     <div class="mb-3 d-flex align-items-center" style="background: white; padding: 20px; border: 1px solid black; border-radius: 10px;">
     <div class="flex-shrink-0">
@@ -147,9 +147,9 @@ const cardsOnDom = (array) => {
       <button class="btn btn-danger" id="delete--${item.videoId}">X</button>
     </div>
   </div>
-    `;
+    `; // This is where we reassign the domString
   }
-  renderToDom('#cardContainer', domString);
+  renderToDom('#cardContainer', domString); //this will add the cards to the cardContainer div
 };
 
 // *********  EVENT LISTENERS  *********  //
